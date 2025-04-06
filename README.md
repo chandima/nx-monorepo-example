@@ -211,10 +211,13 @@ The job consists of several steps, each performing a specific task:
     path: |
       .nx/cache
     key: ${{ runner.os }}-nx-${{ hashFiles('nx.json', '**/project.json') }}
+    restore-keys: |
+      ${{ runner.os }}-nx-
 ```
 
 - Caches the Nx build cache (`.nx/cache`) to optimize performance.
-- The cache key is generated based on the operating system and the hash of `nx.json` and all `project.json` files, ensuring the cache is invalidated when project configurations change.
+- The `key` is generated based on the operating system and the hash of `nx.json` and all `project.json` files, ensuring the cache is invalidated when project configurations change.
+- The `restore-keys` option is used to provide a fallback cache key (`${{ runner.os }}-nx-`) in case the exact cache key is not found. This ensures partial cache restoration, improving performance even when the cache is not fully up-to-date.
 
 #### 4. Install Dependencies
 
